@@ -9,11 +9,14 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class RunAsyncDemo {
 
     public void saveEmployee(File jsonFile) throws ExecutionException, InterruptedException {
 
+        ExecutorService service  = Executors.newFixedThreadPool(3);
         ObjectMapper mapper = new ObjectMapper();
         CompletableFuture<Void> future = CompletableFuture.runAsync(
                 ()->{
@@ -26,8 +29,7 @@ public class RunAsyncDemo {
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                }
-        );
+                }, service);
         future.get();
     }
 
